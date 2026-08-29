@@ -1165,8 +1165,11 @@ describe("Sentinel Observation Layer — §20 Consolidated Master Test Suite", (
     const { rankOpportunities } = await import("@/lib/apex/scan");
     const { derivBus } = await import("@/lib/deriv/tick-bus");
     const { apexCore } = await import("@/lib/apex/core");
+    const { seedObservationEngine } = await import("./test-helpers");
 
     apexCore.retain();
+    // The singleton observation engine is the only ranking source; prime it.
+    seedObservationEngine({ markets: ["1HZ10V"] });
     // Feed 500 ticks for 1HZ10V
     const ticks = [];
     let price = 1000.5;
@@ -1230,8 +1233,11 @@ describe("Sentinel Observation Layer — §20 Consolidated Master Test Suite", (
     const { rankOpportunities } = await import("@/lib/apex/scan");
     const { derivBus } = await import("@/lib/deriv/tick-bus");
     const { apexCore } = await import("@/lib/apex/core");
+    const { seedObservationEngine } = await import("./test-helpers");
 
     apexCore.retain();
+    // Prime the singleton lightly so the cell is observed but not yet RIPE.
+    seedObservationEngine({ markets: ["1HZ25V"], cycles: 1, startTs: 2_000_000 });
     // Feed 500 ticks for 1HZ25V
     const ticks = [];
     let price = 2500.5;
