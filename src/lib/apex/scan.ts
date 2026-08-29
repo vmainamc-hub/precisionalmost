@@ -274,15 +274,31 @@ export function rankOpportunities(
 
     const survivalReport = dossier.survival ?? null;
     const entryTriggerReport = dossier.entryTrigger ?? null;
+    const fallbackWinners = Array.isArray(contract.winners) ? contract.winners : [];
+    const fallbackLosers = Array.from({ length: 10 }, (_, d) => d).filter(
+      (d) => !fallbackWinners.includes(d),
+    );
     const digitPsychologyReport = dossier.psychology?.raw?.digitPsychology ?? {
+      contract: String(prop),
+      side: String(prop).startsWith("OVER") ? "OVER" : "UNDER",
+      barrier: contract.barrier ?? 0,
+      winningZone: fallbackWinners,
+      losingZone: fallbackLosers,
+      boundary: [],
       score: 0,
       verdict: "UNVALIDATED",
       confidence: 0,
       positions: [],
+      rankingDelta: 0,
       weightTotal: 0,
       gained: 0,
       hardBlock: false,
       hardBlockReason: undefined,
+      zoneContested: false,
+      zoneContestedReason: null,
+      reasons: [],
+      cautions: [],
+      summary: "Digit psychology unavailable.",
     };
     const rawCanonical =
       dossier.psychology?.raw?.canonicalState ??
