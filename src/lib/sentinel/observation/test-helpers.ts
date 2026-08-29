@@ -19,12 +19,16 @@ export interface SeedOptions {
   startTs?: number;
   /** Restrict seeding to these markets (defaults to the full universe). */
   markets?: readonly string[];
+  /** Rebuild all cells first so the suite is isolated from earlier tests. */
+  reset?: boolean;
 }
 
 export function seedObservationEngine(opts: SeedOptions = {}): void {
   const cycles = opts.cycles ?? 40;
   const startTs = opts.startTs ?? 1_000_000;
   const markets = opts.markets ?? MARKET_IDS;
+
+  if (opts.reset) observationEngine.resetCells();
 
   for (let i = 0; i < cycles; i++) {
     const ts = startTs + i * 1000;

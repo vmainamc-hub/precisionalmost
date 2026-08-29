@@ -1169,7 +1169,7 @@ describe("Sentinel Observation Layer — §20 Consolidated Master Test Suite", (
 
     apexCore.retain();
     // The singleton observation engine is the only ranking source; prime it.
-    seedObservationEngine({ markets: ["1HZ10V"] });
+    seedObservationEngine({ markets: ["1HZ10V"], reset: true });
     // Feed 500 ticks for 1HZ10V
     const ticks = [];
     let price = 1000.5;
@@ -1237,7 +1237,7 @@ describe("Sentinel Observation Layer — §20 Consolidated Master Test Suite", (
 
     apexCore.retain();
     // Prime the singleton lightly so the cell is observed but not yet RIPE.
-    seedObservationEngine({ markets: ["1HZ25V"], cycles: 1, startTs: 2_000_000 });
+    seedObservationEngine({ markets: ["1HZ25V"], cycles: 1, startTs: 2_000_000, reset: true });
     // Feed 500 ticks for 1HZ25V
     const ticks = [];
     let price = 2500.5;
@@ -1515,6 +1515,7 @@ describe("Sentinel Observation Layer — §20 Consolidated Master Test Suite", (
     weakInput.trigger = { state: "FAILED" };
 
     // Ingest all 4 calibrated inputs into the observation engine
+    observationEngine.resetCells();
     observationEngine.ingest(exceptionalInput);
     observationEngine.ingest(strongInput);
     observationEngine.ingest(moderateInput);
