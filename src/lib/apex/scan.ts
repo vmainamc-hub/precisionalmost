@@ -326,6 +326,8 @@ export function rankOpportunities(
     const priceActionReport = dossier.priceAction ?? {
       score: 0,
       verdict: "NEUTRAL",
+      alignment: "NEUTRAL",
+      rankingDelta: 0,
       veto: false,
       vetoReason: undefined,
     };
