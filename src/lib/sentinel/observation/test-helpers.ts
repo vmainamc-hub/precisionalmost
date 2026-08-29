@@ -9,7 +9,8 @@
  * has a full 90-cell population to work with.
  */
 import { observationEngine } from "./observationEngine";
-import { MARKET_IDS, PROPOSITIONS, emptyEvidenceInput } from "./constants";
+import { MARKET_IDS, PROPOSITIONS } from "./constants";
+import { emptyEvidenceInput } from "./engineAdapter";
 
 export interface SeedOptions {
   /** Number of supportive observations per cell. */
