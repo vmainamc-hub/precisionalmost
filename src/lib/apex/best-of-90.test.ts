@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import { scanNow, DEFAULT_SCAN_OPTIONS } from "./scan";
 import { operatorSurfaceGate } from "./operator-surface-gate";
 import { APEX_UNIVERSE_SYMBOLS } from "./universe";
@@ -6,6 +6,7 @@ import { PROPOSITIONS, type Proposition } from "@/lib/sentinel/observation/const
 import type { MarketIntel, ContractEval, RankedOpportunity, BestOf90Result } from "./types";
 import { NearSignalEngine } from "@/lib/sentinel/near-signal";
 import { canonicalDigitState, contractPsychology } from "@/lib/sentinel/digit-psychology";
+import { seedObservationEngine } from "@/lib/sentinel/observation/test-helpers";
 
 function createControlledRankedCandidate(params: {
   symbol: string;
@@ -480,6 +481,10 @@ function createMockMarket(symbol: string, name: string, biasDigit: number = 7, t
 }
 
 describe("Best-of-90 Full Signal Hydration & Authoritative Presentation", () => {
+  beforeAll(() => {
+    seedObservationEngine();
+  });
+
   const mockMarkets = APEX_UNIVERSE_SYMBOLS.map((s, idx) =>
     createMockMarket(s, `${s} Synthetic Index`, (idx * 2) % 10, 1000),
   );

@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import { FinalDecisionEngine, computeBinomialPValue } from "./final-decision";
 import { SignificanceGuardEngine, type ComboEvidence } from "../risk/significance-guard";
 import { CircuitBreakerEngine, idleCircuitBreaker } from "../risk/circuit-breaker";
@@ -10,6 +10,7 @@ import { APEX_UNIVERSE_SYMBOLS } from "../apex/universe";
 import { PROPOSITIONS, type Proposition } from "./observation/constants";
 import type { MarketIntel, ContractEval, RankedOpportunity } from "../apex/types";
 import type { OpportunityCandidate } from "@/types/sentinel";
+import { seedObservationEngine } from "./observation/test-helpers";
 
 function createMockContracts(marketId: string, biasDigit: number, baseDanger: number = 15): ContractEval[] {
   return PROPOSITIONS.map((prop: Proposition): ContractEval => {
@@ -164,6 +165,10 @@ function createMockMarket(symbol: string, name: string, biasDigit: number = 7, t
 }
 
 describe("Stage 4 Master Verification Test Suite (Tests 1 - 10)", () => {
+  beforeAll(() => {
+    seedObservationEngine();
+  });
+
   const mockMarkets = APEX_UNIVERSE_SYMBOLS.map((s, idx) =>
     createMockMarket(s, `${s} Synthetic Index`, (idx * 2) % 10, 1000),
   );
@@ -755,6 +760,10 @@ describe("Section 20: Diagnostic NEAR-SIGNAL Tests", () => {
 });
 
 describe("Section 7: Single Authoritative Stage 4 Call-Graph & Consumer Fidelity", () => {
+  beforeAll(() => {
+    seedObservationEngine();
+  });
+
   const mockMarkets = APEX_UNIVERSE_SYMBOLS.map((s, idx) =>
     createMockMarket(s, `${s} Synthetic Index`, (idx * 2) % 10, 1000),
   );
