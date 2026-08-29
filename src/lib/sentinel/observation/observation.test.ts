@@ -1165,11 +1165,10 @@ describe("Sentinel Observation Layer — §20 Consolidated Master Test Suite", (
     const { rankOpportunities } = await import("@/lib/apex/scan");
     const { derivBus } = await import("@/lib/deriv/tick-bus");
     const { apexCore } = await import("@/lib/apex/core");
-    const { seedObservationEngine } = await import("./test-helpers");
+    const { mapIntelToObservationInputs } = await import("./engineAdapter");
 
     apexCore.retain();
-    // The singleton observation engine is the only ranking source; prime it.
-    seedObservationEngine({ markets: ["1HZ10V"], reset: true });
+    observationEngine.resetCells();
     // Feed 500 ticks for 1HZ10V
     const ticks = [];
     let price = 1000.5;
@@ -1213,6 +1212,12 @@ describe("Sentinel Observation Layer — §20 Consolidated Master Test Suite", (
       ],
     };
 
+    // The singleton engine is the only ranking source: feed the real adapter
+    // output for this intel so the dossier carries genuine evidence.
+    for (const input of mapIntelToObservationInputs(mockIntel)) {
+      observationEngine.ingest(input);
+    }
+
     const res = rankOpportunities([mockIntel]);
     const u6 = res.ranked.find((r) => r.symbol === "1HZ10V" && r.contract.id === "UNDER6");
 
@@ -1233,11 +1238,10 @@ describe("Sentinel Observation Layer — §20 Consolidated Master Test Suite", (
     const { rankOpportunities } = await import("@/lib/apex/scan");
     const { derivBus } = await import("@/lib/deriv/tick-bus");
     const { apexCore } = await import("@/lib/apex/core");
-    const { seedObservationEngine } = await import("./test-helpers");
+    const { mapIntelToObservationInputs } = await import("./engineAdapter");
 
     apexCore.retain();
-    // Prime the singleton lightly so the cell is observed but not yet RIPE.
-    seedObservationEngine({ markets: ["1HZ25V"], cycles: 1, startTs: 2_000_000, reset: true });
+    observationEngine.resetCells();
     // Feed 500 ticks for 1HZ25V
     const ticks = [];
     let price = 2500.5;
@@ -1280,6 +1284,10 @@ describe("Sentinel Observation Layer — §20 Consolidated Master Test Suite", (
         },
       ],
     };
+
+    for (const input of mapIntelToObservationInputs(mockIntel)) {
+      observationEngine.ingest(input);
+    }
 
     const res = rankOpportunities([mockIntel]);
     const u7 = res.ranked.find((r) => r.symbol === "1HZ25V" && r.contract.id === "UNDER7");
