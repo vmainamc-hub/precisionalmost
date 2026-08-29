@@ -709,8 +709,8 @@ export function BestOpportunityCard({
             <div>
               Exact Combo:{" "}
               <span className="text-foreground">
-                {item.combination
-                  ? `${(((item.combination.exact.weightedWinRate ?? item.combination.exact.winRate ?? 0)) * 100).toFixed(1)}% (N=${item.combination.exact.n ?? 0}, Exp ${(item.combination.exact.weightedExpectancy ?? item.combination.exact.expectancy ?? 0).toFixed(2)})`
+                {item.combination?.exact
+                  ? `${((item.combination.exact.weightedWinRate ?? item.combination.exact.winRate ?? 0) * 100).toFixed(1)}% (N=${item.combination.exact.n ?? 0}, Exp ${(item.combination.exact.weightedExpectancy ?? item.combination.exact.expectancy ?? 0).toFixed(2)})`
                   : "NO COMBO DATA"}
               </span>
             </div>
